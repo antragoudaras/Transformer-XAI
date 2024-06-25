@@ -16,12 +16,12 @@ module load 2022
 module load Miniconda3/4.12.0
 
 # Activate your environment
-source activate IEinAI_env
+source activate Transformer_XAI_env
 
 
-export CODE_SERVER_CONFIG=~/.config/code-server/config_interactive_IEinAI.yaml
+export CODE_SERVER_CONFIG=~/.config/code-server/config_interactive_Transformer_XAI.yaml
 node=$(/bin/hostname)
-port=10127
+port=10120
 user=${USER} 
 
 if [ -f ${CODE_SERVER_CONFIG} ] ; then

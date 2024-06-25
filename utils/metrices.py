@@ -3,6 +3,9 @@ import torch
 from sklearn.metrics import f1_score, average_precision_score
 from sklearn.metrics import precision_recall_curve, roc_curve
 
+import warnings
+warnings.filterwarnings('ignore')
+
 SMOOTH = 1e-6
 __all__ = ['get_f1_scores', 'get_ap_scores', 'batch_pix_accuracy', 'batch_intersection_union', 'get_iou', 'get_pr',
            'get_roc', 'get_ap_multiclass']

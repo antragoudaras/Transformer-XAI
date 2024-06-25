@@ -15,6 +15,6 @@ module load 2022
 module load Miniconda3/4.12.0
 
 # Activate your environment
-source activate IEinAI_env
+source activate Transformer_XAI_env
 
 CUDA_VISIBLE_DEVICES=0 PYTHONPATH=./:$PYTHONPATH python3 baselines/ViT/imagenet_seg_eval.py "$@"
