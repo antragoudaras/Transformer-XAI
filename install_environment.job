@@ -1,0 +1,27 @@
+#!/bin/bash
+
+#SBATCH --partition=gpu
+#SBATCH --gpus=1
+#SBATCH --job-name=InstallEnv
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=18
+#SBATCH --time=00:59:00
+#SBATCH --output=./install_Transformer_XAI_env-%A.out
+
+#exit if an error occurs
+set -e 
+
+module purge
+module load 2022
+module load Miniconda3/4.12.0
+
+
+conda env create -f environment.yml
+
+source activate Transformer_XAI_env
+
+pip install --upgrade pip
+pip install torch==1.7.1+cu110 torchvision==0.8.2+cu110 torchaudio==0.7.2 -f https://download.pytorch.org/whl/torch_stable.html
+pip install -U scikit-learn
+pip install timm
+conda install -c conda-forge code-server==4.23.1
