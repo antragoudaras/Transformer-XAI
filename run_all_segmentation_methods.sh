@@ -8,5 +8,5 @@ methods=("rollout" "full_lrp" "transformer_attribution" "lrp_last_layer" "attn_l
 for method in "${methods[@]}"
 do
     echo "Running method: $method"
-    sbatch --job-name "${method}_" segmentation_initial_methods.job --method "${method}" --imagenet-seg-path "./gtsegs_ijcv.mat" 
+    sbatch --job-name "${method}" segmentation_initial_methods.job --method "${method}" --imagenet-seg-path "./gtsegs_ijcv.mat" 
 done
