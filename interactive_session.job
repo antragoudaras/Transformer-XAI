@@ -1,0 +1,41 @@
+#!/bin/bash
+
+#SBATCH --partition=gpu
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=18
+#SBATCH --gpus=1
+#SBATCH --job-name=Interactive
+#SBATCH --time=00:59:00
+#SBATCH --output=interactive-session-snellius-%A.out
+
+set -e
+
+module purge
+module load 2023
+module load Miniconda3/23.5.2-0
+module load CUDA/12.1.1
+
+
+# Activate your environment
+source activate IEinAI_env
+
+
+export CODE_SERVER_CONFIG=~/.config/code-server/config_interactive_IEinAI.yaml
+node=$(/bin/hostname)
+port=10127
+user=${USER} 
+
+if [ -f ${CODE_SERVER_CONFIG} ] ; then
+ rm ${CODE_SERVER_CONFIG}
+fi
+
+echo "bind-addr: ${node}:${port}" >> $CODE_SERVER_CONFIG 
+echo "auth: password" >> $CODE_SERVER_CONFIG
+echo "password: qwerty1234!" >> $CODE_SERVER_CONFIG
+echo "cert: false" >> $CODE_SERVER_CONFIG
+
+echo "Copy the following line in a new terminal to create a secure SSH tunnel between your computer and Ibex compute node."
+echo "ssh -L localhost:${port}:${node}:${port} ${user}@snellius.surf.nl"
+
+code-server --auth=password
