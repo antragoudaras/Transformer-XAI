@@ -3,7 +3,7 @@
 # entire script fails if a single command fails
 set -e
 
-methods=("rollout" "full_lrp" "transformer_attribution" "lrp_last_layer" "attn_last_layer" "attn_gradcam" "full_lrp")
+methods=("rollout" "lrp" "transformer_attribution" "lrp_last_layer" "attn_last_layer" "attn_gradcam" "full_lrp")
 
 for method in "${methods[@]}"
 do
