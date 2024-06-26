@@ -25,7 +25,7 @@ def return_visualization(original_image, method, class_index=None):
 
     
     if method == 'rollout':
-        transformer_attribution = baselines.generate_rollout(original_image.unsqueeze(0).cuda(), start_layer=1, index=class_index).detach()
+        transformer_attribution = baselines.generate_rollout(original_image.unsqueeze(0).cuda(), start_layer=1).detach()
         transformer_attribution = transformer_attribution.reshape(1, 1, 14, 14)
 
     elif method == 'gradient_rollout_cls_spec':
@@ -124,11 +124,11 @@ if __name__ == "__main__":
             output = model(dog_cat_image.unsqueeze(0).cuda())
             print_top_classes(output, method)
 
-        if method == 'full_lrp' or method == 'lrp_last_layer' or method == 'attn_last_layer':
+        elif method == 'full_lrp' or method == 'lrp_last_layer' or method == 'attn_last_layer':
             output = model_orig_LRP(dog_cat_image.unsqueeze(0).cuda())
             print_top_classes(output, method)
         
-        if method == 'transformer_attribution':
+        elif method == 'transformer_attribution':
             output = model_LRP(dog_cat_image.unsqueeze(0).cuda())
             print_top_classes(output, method)
         else:
