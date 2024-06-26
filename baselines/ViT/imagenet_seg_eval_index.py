@@ -294,8 +294,7 @@ for batch_idx, (image, labels) in enumerate(iterator):
     labels = labels.cuda()
     # print("image", image.shape)
     # print("lables", labels.shape)
-
-    correct, labeled, inter, union, ap, f1, pred, target = eval_batch(images, labels, model, batch_idx)
+    correct, labeled, inter, union, ap, f1, pred, target = eval_batch(images, labels, model, int(batch_idx - 1))
 
     if not np.isnan(pred).any():
         predictions.append(pred)
