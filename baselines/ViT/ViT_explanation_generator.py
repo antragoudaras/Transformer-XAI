@@ -101,10 +101,8 @@ class Baselines:
 
         for blk in blocks:
             attn_heads = blk.attn.get_attention_map()
-            # avg_heads = (attn_heads.sum(dim=1) / attn_heads.shape[1]).detach()
 
             grad_heads = blk.attn.get_attn_gradients()
-            # avg_grad = (grad.sum(dim=1) / grad.shape[1]).detach()
 
             attention_heads_fused = attn_heads * grad_heads
             attention_heads_fused = (attention_heads_fused.sum(dim=1) / attention_heads_fused.shape[1]).detach() #calculate average of all heads
