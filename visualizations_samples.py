@@ -190,46 +190,61 @@ if __name__ == "__main__":
         # generate visualization for class 340: 'zebra'
         zebra = return_visualization(tusker_zebra_image, method, class_index=340)
         zebra_specific_sal_maps.append(zebra)
-
-
-    # image = Image.open('samples/dogbird.png')
-    # dog_bird_image = transform(image)
-
-    # dog_specific_sal_maps = []
-    # bird_specific_sal_maps = []
-
-    # for method in methods:
-    #     print(f'--------------------- Examining Method: {method} ----------------------')
-    #     if method == 'rollout' or method == 'attn_gradcam':
-    #         output = model(dog_bird_image.unsqueeze(0).cuda())
-    #         print_top_classes(output, method)
-    #     if method == 'full_lrp' or method == 'lrp_last_layer' or method == 'attn_last_layer':
-    #         output = model_orig_LRP(dog_bird_image.unsqueeze(0).cuda())
-    #         print_top_classes(output, method)
-    #     if method == 'transformer_attribution':
-    #         output = model_LRP(dog_bird_image.unsqueeze(0).cuda())
-    #         print_top_classes(output, method)
-    #     else:
-    #         raise ValueError(f'Unknown method: {method}')
-
-    #     # basset - the predicted class
-    #     basset = return_visualization(dog_bird_image, method, class_index=161)
-    #     dog_specific_sal_maps.append(basset)
-
-    #     # generate visualization for class 87: 'African grey, African gray, Psittacus erithacus (grey parrot)'
-    #     parrot = return_visualization(dog_bird_image, method, class_index=87)
-    #     bird_specific_sal_maps.append(parrot)
     
-    # plt.figure(figsize=(10, 5))
-    # for i, method in enumerate(methods):
-    #     plt.subplot(2, (len(methods)+1)//2, i+1)
-    #     plt.imshow(dog_specific_sal_maps[i])
-    #     plt.title(f"Method: {method}")
-    #     plt.axis('off')
+    fig, axs = plt.subplots(2, len(methods), figsize=(20, 10))
 
-    #     plt.subplot(2, (len(methods)+1)//2, i+1+(len(methods)+1)//2)
-    #     plt.imshow(bird_specific_sal_maps[i])
-    #     plt.title(f"Method: {method}")
-    #     plt.axis('off')
-    # plt.tight_layout()
-    # plt.savefig('dog_bird_sal_maps.png')
+    for i, method in enumerate(methods):
+        axs[0, i].imshow(tusker_specific_sal_maps[i])
+        axs[0, i].set_title(f"{method}", fontsize=12)
+        axs[0, i].axis('off')
+    
+    for i, method in enumerate(methods):
+        axs[1, i].imshow(zebra_specific_sal_maps[i])
+        axs[1, i].set_title(f"{method}", fontsize=12)
+        axs[1, i].axis('off')
+    
+    plt.subplots_adjust(wspace=0.1, hspace=0.1)
+    plt.savefig('tusker_zebra_sal_maps.png')
+
+    image = Image.open('samples/dogbird.png')
+    dog_bird_image = transform(image)
+
+    dog_specific_sal_maps = []
+    bird_specific_sal_maps = []
+
+    for method in methods:
+        print(f'--------------------- Examining Method: {method} ----------------------')
+        if method == 'rollout' or method == 'attn_gradcam':
+            output = model(dog_bird_image.unsqueeze(0).cuda())
+            print_top_classes(output, method)
+        if method == 'full_lrp' or method == 'lrp_last_layer' or method == 'attn_last_layer':
+            output = model_orig_LRP(dog_bird_image.unsqueeze(0).cuda())
+            print_top_classes(output, method)
+        if method == 'transformer_attribution':
+            output = model_LRP(dog_bird_image.unsqueeze(0).cuda())
+            print_top_classes(output, method)
+        else:
+            raise ValueError(f'Unknown method: {method}')
+
+        # basset - the predicted class
+        basset = return_visualization(dog_bird_image, method, class_index=161)
+        dog_specific_sal_maps.append(basset)
+
+        # generate visualization for class 87: 'African grey, African gray, Psittacus erithacus (grey parrot)'
+        parrot = return_visualization(dog_bird_image, method, class_index=87)
+        bird_specific_sal_maps.append(parrot)
+    
+    fig, axs = plt.subplots(2, len(methods), figsize=(20, 10))
+
+    for i, method in enumerate(methods):
+        axs[0, i].imshow(dog_specific_sal_maps[i])
+        axs[0, i].set_title(f"{method}", fontsize=12)
+        axs[0, i].axis('off')
+    
+    for i, method in enumerate(methods):
+        axs[1, i].imshow(bird_specific_sal_maps[i])
+        axs[1, i].set_title(f"{method}", fontsize=12)
+        axs[1, i].axis('off')
+    
+    plt.subplots_adjust(wspace=0.1, hspace=0.1)
+    plt.savefig('dog_bird_sal_maps.png')
