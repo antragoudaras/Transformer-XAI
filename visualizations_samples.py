@@ -169,19 +169,16 @@ if __name__ == "__main__":
     zebra_specific_sal_maps = []
     for method in methods:
         print(f'--------------------- Examining Method: {method} ----------------------')
-        if method == 'rollout' or method == 'attn_gradcam':
+        if method == 'rollout' or method == 'gradient_rollout_cls_spec' or method == 'attn_gradcam':
             output = model(tusker_zebra_image.unsqueeze(0).cuda())
             print_top_classes(output, method)
-        if method == 'full_lrp' or method == 'lrp_last_layer' or method == 'attn_last_layer':
+        elif method == 'full_lrp' or method == 'lrp_last_layer' or method == 'attn_last_layer':
             output = model_orig_LRP(tusker_zebra_image.unsqueeze(0).cuda())
             print_top_classes(output, method)
-        if method == 'transformer_attribution':
+        elif method == 'transformer_attribution':
             output = model_LRP(tusker_zebra_image.unsqueeze(0).cuda())
             print_top_classes(output, method)
-        else:
-            raise ValueError(f'Unknown method: {method}')
-    
-
+        
         # tusker - the predicted class
         tusker = return_visualization(tusker_zebra_image, method)
         tusker_specific_sal_maps.append(tusker)
@@ -214,18 +211,16 @@ if __name__ == "__main__":
 
     for method in methods:
         print(f'--------------------- Examining Method: {method} ----------------------')
-        if method == 'rollout' or method == 'attn_gradcam':
+        if method == 'rollout' or method == 'gradient_rollout_cls_spec' or method == 'attn_gradcam':
             output = model(dog_bird_image.unsqueeze(0).cuda())
             print_top_classes(output, method)
-        if method == 'full_lrp' or method == 'lrp_last_layer' or method == 'attn_last_layer':
+        elif method == 'full_lrp' or method == 'lrp_last_layer' or method == 'attn_last_layer':
             output = model_orig_LRP(dog_bird_image.unsqueeze(0).cuda())
             print_top_classes(output, method)
-        if method == 'transformer_attribution':
+        elif method == 'transformer_attribution':
             output = model_LRP(dog_bird_image.unsqueeze(0).cuda())
             print_top_classes(output, method)
-        else:
-            raise ValueError(f'Unknown method: {method}')
-
+            
         # basset - the predicted class
         basset = return_visualization(dog_bird_image, method, class_index=161)
         dog_specific_sal_maps.append(basset)
