@@ -141,7 +141,7 @@ if __name__ == "__main__":
         dog_specific_sal_maps.append(dog)
 
     # Create a figure with two rows and len(methods) columns
-    fig, axs = plt.subplots(2, len(methods), figsize=(18, 10))
+    fig, axs = plt.subplots(2, len(methods), figsize=(20, 12))
 
     # Plot cat_specific_sal_maps
     for i, method in enumerate(methods):
