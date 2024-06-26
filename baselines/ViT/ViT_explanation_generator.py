@@ -82,18 +82,35 @@ class Baselines:
         rollout = compute_rollout_attention(all_layer_attentions, start_layer=start_layer)
         return rollout[:,0, 1:]
     
-    def generate_gradient_att_cls_rollout(self, input, start_layer=0):
-        self.model(input)
+    def generate_gradient_att_cls_rollout(self, input, start_layer=0, index=None):
+        output = self.model(input.cuda(), register_hook=True)
+        
+        if index == None:
+            index = np.argmax(output.cpu().data.numpy())
+
+        one_hot = np.zeros((1, output.size()[-1]), dtype=np.float32)
+        one_hot[0][index] = 1
+        one_hot = torch.from_numpy(one_hot).requires_grad_(True)
+        one_hot = torch.sum(one_hot.cuda() * output)
+
+        self.model.zero_grad()
+        one_hot.backward(retain_graph=True)
+        
         blocks = self.model.blocks
         all_layer_fused_grad_attn = []
+
         for blk in blocks:
             attn_heads = blk.attn.get_attention_map()
-            avg_heads = (attn_heads.sum(dim=1) / attn_heads.shape[1]).detach()
+            # avg_heads = (attn_heads.sum(dim=1) / attn_heads.shape[1]).detach()
 
-            grad = blk.attn.get_attn_gradients()
-            avg_grad = (grad.sum(dim=1) / grad.shape[1]).detach()
+            grad_heads = blk.attn.get_attn_gradients()
+            # avg_grad = (grad.sum(dim=1) / grad.shape[1]).detach()
+
+            attention_heads_fused = attn_heads * grad_heads
+            attention_heads_fused = (attention_heads_fused.sum(dim=1) / attention_heads_fused.shape[1]).detach() #calculate average of all heads
+            attention_heads_fused[attention_heads_fused < 0] = 0 #masking negative values
             
-            fused_grad_attn = avg_heads * avg_grad
-            all_layer_fused_grad_attn.append(fused_grad_attn)
+            all_layer_fused_grad_attn.append(attention_heads_fused)
+
         grad_rollout = compute_rollout_attention(all_layer_fused_grad_attn, start_layer=start_layer)
         return grad_rollout[:,0, 1:]
