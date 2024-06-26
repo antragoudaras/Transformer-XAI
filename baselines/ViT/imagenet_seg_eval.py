@@ -64,7 +64,7 @@ parser.add_argument('--train_dataset', type=str, default='imagenet', metavar='N'
 parser.add_argument('--method', type=str,
                     default='grad_rollout',
                     choices=[ 'rollout', 'lrp','transformer_attribution', 'full_lrp', 'lrp_last_layer',
-                              'attn_last_layer', 'attn_gradcam'],
+                              'attn_last_layer', 'attn_gradcam', 'gradient_rollout_cls_spec'],
                     help='')
 parser.add_argument('--thr', type=float, default=0.,
                     help='threshold')
@@ -186,6 +186,10 @@ def eval_batch(image, labels, evaluator, index):
     # segmentation test for the rollout baseline
     if args.method == 'rollout':
         Res = baselines.generate_rollout(image.cuda(), start_layer=1).reshape(batch_size, 1, 14, 14)
+    
+    # segmentation test for the gradient rollout class-specific baseline
+    if args.method == 'gradient_rollout_cls_spec':
+        Res = baselines.generate_gradient_att_cls_rollout(image.cuda(), start_layer=1).reshape(batch_size, 1, 14, 14)
     
     # segmentation test for the LRP baseline (this is full LRP, not partial)
     elif args.method == 'full_lrp':

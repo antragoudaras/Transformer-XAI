@@ -81,3 +81,19 @@ class Baselines:
             all_layer_attentions.append(avg_heads)
         rollout = compute_rollout_attention(all_layer_attentions, start_layer=start_layer)
         return rollout[:,0, 1:]
+    
+    def generate_gradient_att_cls_rollout(self, input, start_layer=0):
+        self.model(input)
+        blocks = self.model.blocks
+        all_layer_fused_grad_attn = []
+        for blk in blocks:
+            attn_heads = blk.attn.get_attention_map()
+            avg_heads = (attn_heads.sum(dim=1) / attn_heads.shape[1]).detach()
+
+            grad = blk.attn.get_attn_gradients()
+            avg_grad = (grad.sum(dim=1) / grad.shape[1]).detach()
+            
+            fused_grad_attn = avg_heads * avg_grad
+            all_layer_fused_grad_attn.append(fused_grad_attn)
+        grad_rollout = compute_rollout_attention(all_layer_fused_grad_attn, start_layer=start_layer)
+        return grad_rollout[:,0, 1:]
