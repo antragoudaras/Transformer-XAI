@@ -294,9 +294,10 @@ for batch_idx, (image, labels) in enumerate(iterator):
     correct, labeled, inter, union, ap, f1, pred, target = eval_batch(images, labels, model, batch_idx)
 
     if not np.isnan(pred).any():
-        print("Found nan in pred")
         predictions.append(pred)
         targets.append(target)
+    else:
+        print("\n",f"Found NaN values in pred in batch: {batch_idx}", flush=True)
 
     total_correct += correct.astype('int64')
     total_label += labeled.astype('int64')
