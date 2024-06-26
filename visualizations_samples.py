@@ -143,12 +143,12 @@ if __name__ == "__main__":
     plt.figure(figsize=(10, 5))
 
     for i, method in enumerate(methods):
-        plt.subplot(2, len(methods)//2, i+1)
+        plt.subplot(2, (len(methods)+1)//2, i+1)
         plt.imshow(cat_specific_sal_maps[i])
         plt.title(f"Method: {method}")
         plt.axis('off')
 
-        plt.subplot(2, len(methods)//2, i+1+len(methods)//2)
+        plt.subplot(2, (len(methods)+1)//2, i+1+(len(methods)+1)//2)
         plt.imshow(dog_specific_sal_maps[i])
         plt.title(f"Method: {method}")
         plt.axis('off')
@@ -190,12 +190,12 @@ if __name__ == "__main__":
 
     plt.figure(figsize=(10, 5))
     for i, method in enumerate(methods):
-        plt.subplot(2, len(methods)//2, i+1)
+        plt.subplot(2, (len(methods)+1)//2, i+1)
         plt.imshow(tusker_specific_sal_maps[i])
         plt.title(f"Method: {method}")
         plt.axis('off')
 
-        plt.subplot(2, len(methods)//2, i+1+len(methods)//2)
+        plt.subplot(2, (len(methods)+1)//2, i+1+(len(methods)+1)//2)
         plt.imshow(zebra_specific_sal_maps[i])
         plt.title(f"Method: {method}")
         plt.axis('off')
@@ -233,12 +233,12 @@ if __name__ == "__main__":
     
     plt.figure(figsize=(10, 5))
     for i, method in enumerate(methods):
-        plt.subplot(2, len(methods)//2, i+1)
+        plt.subplot(2, (len(methods)+1)//2, i+1)
         plt.imshow(dog_specific_sal_maps[i])
         plt.title(f"Method: {method}")
         plt.axis('off')
 
-        plt.subplot(2, len(methods)//2, i+1+len(methods)//2)
+        plt.subplot(2, (len(methods)+1)//2, i+1+(len(methods)+1)//2)
         plt.imshow(bird_specific_sal_maps[i])
         plt.title(f"Method: {method}")
         plt.axis('off')
