@@ -146,13 +146,13 @@ if __name__ == "__main__":
     # Plot cat_specific_sal_maps
     for i, method in enumerate(methods):
         axs[0, i].imshow(cat_specific_sal_maps[i])
-        axs[0, i].set_title(f"Method: {method}")
+        axs[0, i].set_title(f"{method}")
         axs[0, i].axis('off')
 
     # Plot dog_specific_sal_maps
     for i, method in enumerate(methods):
         axs[1, i].imshow(dog_specific_sal_maps[i])
-        axs[1, i].set_title(f"Method: {method}")
+        axs[1, i].set_title(f"{method}")
         axs[1, i].axis('off')
 
     # Adjust spacing between subplots
