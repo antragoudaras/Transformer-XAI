@@ -14,9 +14,9 @@ from baselines.ViT.ViT_orig_LRP import vit_base_patch16_224 as vit_orig_LRP
 
 # create heatmap from mask on image
 def show_cam_on_image(img, mask):
-    heatmap = cv2.applyColorMap(np.uint8(255 * mask.cpu()), cv2.COLORMAP_JET)
+    heatmap = cv2.applyColorMap(np.uint8(255 * mask), cv2.COLORMAP_JET)
     heatmap = np.float32(heatmap) / 255
-    cam = heatmap + np.float32(img.cpu())
+    cam = heatmap + np.float32(img)
     cam = cam / np.max(cam)
     return cam
 
@@ -26,33 +26,34 @@ def return_visualization(original_image, method, class_index=None):
     
     if method == 'rollout':
         transformer_attribution = baselines.generate_rollout(original_image.unsqueeze(0).cuda(), start_layer=1).detach()
-        transformer_attribution = transformer_attribution.reshape(1, 1, 14, 14)
+        transformer_attribution = transformer_attribution.reshape(1, 1, 14, 14).data.cpu()
 
     elif method == 'gradient_rollout_cls_spec':
         transformer_attribution = baselines.generate_gradient_att_cls_rollout(original_image.unsqueeze(0).cuda(), start_layer=1, index=class_index).detach()
+        transformer_attribution = transformer_attribution.reshape(1, 1, 14, 14).data.cpu()
     elif method == 'full_lrp':
         transformer_attribution = orig_lrp.generate_LRP(original_image.unsqueeze(0).cuda(), method="full", index=class_index).detach()
-        transformer_attribution = transformer_attribution.reshape(1, 1, 224, 224)
+        transformer_attribution = transformer_attribution.reshape(1, 1, 224, 224).data.cpu()
     
     elif method == 'transformer_attribution':
         transformer_attribution = lrp.generate_LRP(original_image.unsqueeze(0).cuda(), method="transformer_attribution", index=class_index).detach()
-        transformer_attribution = transformer_attribution.reshape(1, 1, 14, 14)
+        transformer_attribution = transformer_attribution.reshape(1, 1, 14, 14).data.cpu()
 
     elif method == 'lrp_last_layer':
         transformer_attribution = orig_lrp.generate_LRP(original_image.unsqueeze(0).cuda(), method="last_layer",  index=class_index).detach()
-        transformer_attribution = transformer_attribution.reshape(1, 1, 14, 14)
+        transformer_attribution = transformer_attribution.reshape(1, 1, 14, 14).data.cpu()
     elif method == 'attn_last_layer':
         transformer_attribution = orig_lrp.generate_LRP(original_image.unsqueeze(0).cuda(), index=class_index, method="last_layer_attn").detach()
-        transformer_attribution = transformer_attribution.reshape(1, 1, 14, 14)
+        transformer_attribution = transformer_attribution.reshape(1, 1, 14, 14).data.cpu()
     elif method == 'attn_gradcam':
         transformer_attribution = baselines.generate_cam_attn(original_image.unsqueeze(0).cuda(), index=class_index).detach()
-        transformer_attribution = transformer_attribution.reshape(1, 1, 14, 14)
+        transformer_attribution = transformer_attribution.reshape(1, 1, 14, 14).data.cpu()
     
     if method != 'full_lrp':
-        transformer_attribution = torch.nn.functional.interpolate(transformer_attribution, scale_factor=16, mode='bilinear').cuda()
+        transformer_attribution = torch.nn.functional.interpolate(transformer_attribution, scale_factor=16, mode='bilinear').numpy()
 
     transformer_attribution = (transformer_attribution - transformer_attribution.min()) / (transformer_attribution.max() - transformer_attribution.min())
-
+    transformer_attribution = transformer_attribution.reshape(transformer_attribution.shape[-2], transformer_attribution.shape[-1])
 
     image_transformer_attribution = original_image.permute(1, 2, 0).data.cpu().numpy()
     image_transformer_attribution = (image_transformer_attribution - image_transformer_attribution.min()) / (image_transformer_attribution.max() - image_transformer_attribution.min())
@@ -80,8 +81,7 @@ def print_top_classes(predictions, method, **kwargs):
         print(output_string)
 
 if __name__ == "__main__":
-    methods = ['rollout', 'gradient_rollout_cls_spec', 'lrp', 'transformer_attribution', 'full_lrp', 'lrp_last_layer',
-                                 'attn_last_layer', 'attn_gradcam']
+    methods=["rollout", "gradient_rollout_cls_spec", "transformer_attribution", "lrp_last_layer", "attn_last_layer", "attn_gradcam", "full_lrp"]
 
     cuda = torch.cuda.is_available()
     device = torch.device("cuda" if cuda else "cpu")
@@ -120,7 +120,7 @@ if __name__ == "__main__":
 
     for method in methods:
         print(f'--------------------- Examining Method: {method} ----------------------')    
-        if method == 'rollout' or method == 'attn_gradcam':
+        if method == 'rollout' or method == 'gradient_rollout_cls_spec' or method == 'attn_gradcam':
             output = model(dog_cat_image.unsqueeze(0).cuda())
             print_top_classes(output, method)
 
@@ -131,8 +131,6 @@ if __name__ == "__main__":
         elif method == 'transformer_attribution':
             output = model_LRP(dog_cat_image.unsqueeze(0).cuda())
             print_top_classes(output, method)
-        else:
-            raise ValueError(f'Unknown method: {method}')
 
         # cat - the predicted class
         cat = return_visualization(dog_cat_image, method)
