@@ -141,22 +141,22 @@ if __name__ == "__main__":
         dog_specific_sal_maps.append(dog)
 
     # Create a figure with two rows and len(methods) columns
-    fig, axs = plt.subplots(2, len(methods), figsize=(15, 8))
+    fig, axs = plt.subplots(2, len(methods), figsize=(18, 10))
 
     # Plot cat_specific_sal_maps
     for i, method in enumerate(methods):
         axs[0, i].imshow(cat_specific_sal_maps[i])
-        axs[0, i].set_title(f"{method}")
+        axs[0, i].set_title(f"{method}", fontsize=12)  # Increase fontsize for better visibility
         axs[0, i].axis('off')
 
     # Plot dog_specific_sal_maps
     for i, method in enumerate(methods):
         axs[1, i].imshow(dog_specific_sal_maps[i])
-        axs[1, i].set_title(f"{method}")
+        axs[1, i].set_title(f"{method}", fontsize=12)  # Increase fontsize for better visibility
         axs[1, i].axis('off')
 
-    # Adjust spacing between subplots
-    plt.subplots_adjust(wspace=0.1, hspace=0.1)
+    # Adjust spacing between subplots and increase spacing for titles
+    plt.subplots_adjust(wspace=0.3, hspace=0.3)
 
     # Save the plot as an image
     plt.savefig('dog_cat_sal_maps.png')
