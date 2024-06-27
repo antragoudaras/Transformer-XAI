@@ -243,6 +243,8 @@ if __name__ == "__main__":
         # axs[0, i].set_title(f"{method}", fontsize=12)
         axs[0, i].axis('off')
 
+    grid_image = np.ones((dog_specific_sal_maps[0].shape[0] + bird_specific_sal_maps[0].shape[0], dog_specific_sal_maps[0].shape[1] * len(methods) + 1, dog_specific_sal_maps[0].shape[2]))
+
     for i, method in enumerate(methods):
         # Place bird_specific_sal_maps in the image grid
         grid_image[dog_specific_sal_maps[i].shape[0]:, i*bird_specific_sal_maps[i].shape[1]:(i+1)*bird_specific_sal_maps[i].shape[1], :] = bird_specific_sal_maps[i]
