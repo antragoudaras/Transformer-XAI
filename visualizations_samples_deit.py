@@ -102,14 +102,11 @@ if __name__ == "__main__":
     orig_lrp = LRP(model_orig_LRP)
     
     normalize = transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
-    
     transform = transforms.Compose([
-        transforms.Resize(256),
-        transforms.CenterCrop(224),
+        transforms.Resize((224, 224)),
         transforms.ToTensor(),
         normalize,
     ])
-
 
 
     image = Image.open('samples/catdog.png')
@@ -160,7 +157,7 @@ if __name__ == "__main__":
     plt.subplots_adjust(wspace=0.1, hspace=-0.6)
 
     # Save the plot as an image
-    plt.savefig('dog_cat_sal_maps_deit_v2.png')
+    plt.savefig('dog_cat_sal_maps_deit_v2_corrected.png')
 
     image = Image.open('samples/el2.png')
     tusker_zebra_image = transform(image)
@@ -203,7 +200,7 @@ if __name__ == "__main__":
     
     # plt.subplots_adjust(wspace=0.1, hspace=0.1)
     plt.subplots_adjust(wspace=0.1, hspace=-0.6)
-    plt.savefig('tusker_zebra_sal_maps_deit_v2.png')
+    plt.savefig('tusker_zebra_sal_maps_deit_v2_corrected.png')
 
     image = Image.open('samples/dogbird.png')
     dog_bird_image = transform(image)
@@ -244,4 +241,4 @@ if __name__ == "__main__":
         axs[1, i].axis('off')
     
     plt.subplots_adjust(wspace=0.1, hspace=-0.6)
-    plt.savefig('dog_bird_sal_maps_deit_v2.png')
+    plt.savefig('dog_bird_sal_maps_deit_v2_corrected.png')
