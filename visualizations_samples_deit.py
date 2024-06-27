@@ -133,7 +133,7 @@ if __name__ == "__main__":
             print_top_classes(output, method)
 
         # cat - the predicted class
-        cat = return_visualization(dog_cat_image, method)
+        cat = return_visualization(dog_cat_image, method, class_index=282)
         cat_specific_sal_maps.append(cat)
         # dog 
         # generate visualization for class 243: 'bull mastiff'
@@ -146,20 +146,21 @@ if __name__ == "__main__":
     # Plot cat_specific_sal_maps
     for i, method in enumerate(methods):
         axs[0, i].imshow(cat_specific_sal_maps[i])
-        axs[0, i].set_title(f"{method}", fontsize=12)  # Increase fontsize for better visibility
+        # axs[0, i].set_title(f"{method}", fontsize=12)  # Increase fontsize for better visibility
         axs[0, i].axis('off')
 
     # Plot dog_specific_sal_maps
     for i, method in enumerate(methods):
         axs[1, i].imshow(dog_specific_sal_maps[i])
-        axs[1, i].set_title(f"{method}", fontsize=12)  # Increase fontsize for better visibility
+        # axs[1, i].set_title(f"{method}", fontsize=12)  # Increase fontsize for better visibility
         axs[1, i].axis('off')
 
     # Adjust spacing between subplots and increase spacing for titles
-    plt.subplots_adjust(wspace=0.1, hspace=0.1)
+    # plt.subplots_adjust(wspace=0.1, hspace=0.1)
+    plt.subplots_adjust(wspace=0.1, hspace=-0.6)
 
     # Save the plot as an image
-    plt.savefig('dog_cat_sal_maps_deit.png')
+    plt.savefig('dog_cat_sal_maps_deit_v2.png')
 
     image = Image.open('samples/el2.png')
     tusker_zebra_image = transform(image)
@@ -180,7 +181,7 @@ if __name__ == "__main__":
             print_top_classes(output, method)
         
         # tusker - the predicted class
-        tusker = return_visualization(tusker_zebra_image, method)
+        tusker = return_visualization(tusker_zebra_image, method, class_index=101)
         tusker_specific_sal_maps.append(tusker)
 
         # zebra 
@@ -192,16 +193,17 @@ if __name__ == "__main__":
 
     for i, method in enumerate(methods):
         axs[0, i].imshow(tusker_specific_sal_maps[i])
-        axs[0, i].set_title(f"{method}", fontsize=12)
+        # axs[0, i].set_title(f"{method}", fontsize=12)
         axs[0, i].axis('off')
     
     for i, method in enumerate(methods):
         axs[1, i].imshow(zebra_specific_sal_maps[i])
-        axs[1, i].set_title(f"{method}", fontsize=12)
+        # axs[1, i].set_title(f"{method}", fontsize=12)
         axs[1, i].axis('off')
     
-    plt.subplots_adjust(wspace=0.1, hspace=0.1)
-    plt.savefig('tusker_zebra_sal_maps_deit.png')
+    # plt.subplots_adjust(wspace=0.1, hspace=0.1)
+    plt.subplots_adjust(wspace=0.1, hspace=-0.6)
+    plt.savefig('tusker_zebra_sal_maps_deit_v2.png')
 
     image = Image.open('samples/dogbird.png')
     dog_bird_image = transform(image)
@@ -233,13 +235,13 @@ if __name__ == "__main__":
 
     for i, method in enumerate(methods):
         axs[0, i].imshow(dog_specific_sal_maps[i])
-        axs[0, i].set_title(f"{method}", fontsize=12)
+        # axs[0, i].set_title(f"{method}", fontsize=12)
         axs[0, i].axis('off')
     
     for i, method in enumerate(methods):
         axs[1, i].imshow(bird_specific_sal_maps[i])
-        axs[1, i].set_title(f"{method}", fontsize=12)
+        # axs[1, i].set_title(f"{method}", fontsize=12)
         axs[1, i].axis('off')
     
-    plt.subplots_adjust(wspace=0.1, hspace=0.1)
-    plt.savefig('dog_bird_sal_maps_deit.png')
+    plt.subplots_adjust(wspace=0.1, hspace=-0.6)
+    plt.savefig('dog_bird_sal_maps_deit_v2.png')
