@@ -232,13 +232,13 @@ if __name__ == "__main__":
     
     # Create an image grid
     grid_image = np.ones((dog_specific_sal_maps[0].shape[0], dog_specific_sal_maps[0].shape[1] * len(methods) + 1, dog_specific_sal_maps[0].shape[2]))
-    grid_image[:, :dog_specific_sal_maps.shape[1], :] = dog_specific_sal_maps / 255
+    grid_image[:, : dog_specific_sal_maps[0].shape[1], :] = np.array(dog_specific_sal_maps) / 255
 
     fig, axs = plt.subplots(2, len(methods), figsize=(20, 10))
 
     for i, method in enumerate(methods):
         # Place dog_specific_sal_maps in the image grid
-        grid_image[0:dog_specific_sal_maps[i].shape[0], i*dog_specific_sal_maps[i].shape[1]:(i+1)*dog_specific_sal_maps[i].shape[1], :] = dog_specific_sal_maps[i] /255
+        grid_image[0:dog_specific_sal_maps[i].shape[0], i*dog_specific_sal_maps[i].shape[1]:(i+1)*dog_specific_sal_maps[i].shape[1], :] = dog_specific_sal_maps[i]
 
         axs[0, i].imshow(grid_image)
         # axs[0, i].set_title(f"{method}", fontsize=12)
@@ -248,7 +248,7 @@ if __name__ == "__main__":
 
     for i, method in enumerate(methods):
         # Place bird_specific_sal_maps in the image grid
-        grid_image[dog_specific_sal_maps[i].shape[0]:, i*bird_specific_sal_maps[i].shape[1]:(i+1)*bird_specific_sal_maps[i].shape[1], :] = bird_specific_sal_maps[i] / 255
+        grid_image[dog_specific_sal_maps[i].shape[0]:, i*bird_specific_sal_maps[i].shape[1]:(i+1)*bird_specific_sal_maps[i].shape[1], :] = bird_specific_sal_maps[i]
 
         axs[1, i].imshow(grid_image)
         # axs[1, i].set_title(f"{method}", fontsize=12)
