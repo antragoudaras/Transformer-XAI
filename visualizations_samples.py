@@ -11,7 +11,7 @@ from baselines.ViT.ViT_explanation_generator import Baselines, LRP
 from baselines.ViT.ViT_new import vit_base_patch16_224
 from baselines.ViT.ViT_LRP import vit_base_patch16_224 as vit_LRP
 from baselines.ViT.ViT_orig_LRP import vit_base_patch16_224 as vit_orig_LRP
-import numpy as np
+from mpl_toolkits.axes_grid1 import ImageGrid
 
 # create heatmap from mask on image
 def show_cam_on_image(img, mask):
@@ -230,29 +230,17 @@ if __name__ == "__main__":
         parrot = return_visualization(dog_bird_image, method, class_index=87)
         bird_specific_sal_maps.append(parrot)
     
-    # Create an image grid
-    grid_image = np.ones((dog_specific_sal_maps[0].shape[0], dog_specific_sal_maps[0].shape[1] * len(methods) + 1, dog_specific_sal_maps[0].shape[2]))
-    grid_image[:, : dog_specific_sal_maps[0].shape[1], :] = np.array(dog_specific_sal_maps) / 255
-
-    fig, axs = plt.subplots(2, len(methods), figsize=(20, 10))
+    import matplotlib.pyplot as plt
+    fig = plt.figure(figsize=(20, 10))
+    grid = ImageGrid(fig, 111, nrows_ncols=(2, len(methods)), axes_pad=0.5)
 
     for i, method in enumerate(methods):
-        # Place dog_specific_sal_maps in the image grid
-        grid_image[0:dog_specific_sal_maps[i].shape[0], i*dog_specific_sal_maps[i].shape[1]:(i+1)*dog_specific_sal_maps[i].shape[1], :] = dog_specific_sal_maps[i]
+        grid[2*i].imshow(dog_specific_sal_maps[i])
+        # grid[2*i].set_title(f"{method}", fontsize=12)
+        grid[2*i].axis('off')
 
-        axs[0, i].imshow(grid_image)
-        # axs[0, i].set_title(f"{method}", fontsize=12)
-        axs[0, i].axis('off')
+        grid[2*i+1].imshow(bird_specific_sal_maps[i])
+        # grid[2*i+1].set_title(f"{method}", fontsize=12)
+        grid[2*i+1].axis('off')
 
-    grid_image = np.ones((dog_specific_sal_maps[0].shape[0] + bird_specific_sal_maps[0].shape[0], dog_specific_sal_maps[0].shape[1] * len(methods) + 1, dog_specific_sal_maps[0].shape[2]))
-
-    for i, method in enumerate(methods):
-        # Place bird_specific_sal_maps in the image grid
-        grid_image[dog_specific_sal_maps[i].shape[0]:, i*bird_specific_sal_maps[i].shape[1]:(i+1)*bird_specific_sal_maps[i].shape[1], :] = bird_specific_sal_maps[i]
-
-        axs[1, i].imshow(grid_image)
-        # axs[1, i].set_title(f"{method}", fontsize=12)
-        axs[1, i].axis('off')
-
-    # plt.subplots_adjust(wspace=0.1, hspace=0.1)
     plt.savefig('dog_bird_sal_maps_v3.png')
