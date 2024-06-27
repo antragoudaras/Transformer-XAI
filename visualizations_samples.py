@@ -241,5 +241,5 @@ if __name__ == "__main__":
         # axs[1, i].set_title(f"{method}", fontsize=12)
         axs[1, i].axis('off')
     
-    # plt.subplots_adjust(wspace=0.1, hspace=0.1)
+    plt.subplots_adjust(wspace=0.1, hspace=-0.6)
     plt.savefig('dog_bird_sal_maps_v2.png')
