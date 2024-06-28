@@ -1,0 +1,20 @@
+#!/bin/bash
+
+#SBATCH --partition=gpu
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=18
+#SBATCH --gpus=1
+#SBATCH --time=00:59:59
+#SBATCH --output=./%x-%j.out
+
+set -e
+
+module purge
+module load 2022
+module load Miniconda3/4.12.0
+
+# Activate your environment
+source activate Transformer_XAI_env
+
+CUDA_VISIBLE_DEVICES=0 PYTHONPATH=./:$PYTHONPATH python3 baselines/ViT/imagenet_seg_eval_large_ViT.py "$@"
